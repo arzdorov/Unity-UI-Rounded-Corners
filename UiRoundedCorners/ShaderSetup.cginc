@@ -15,6 +15,23 @@ struct v2f {
 
 int _UIVertexColorAlwaysGammaSpace;
 
+#ifndef UIGammaToLinear
+inline float GammaToLinear(float value)
+{
+    return (value <= 0.04045) ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4);
+}
+
+inline float3 UIGammaToLinear(float3 color)
+{
+    return float3(GammaToLinear(color.r), GammaToLinear(color.g), GammaToLinear(color.b));
+}
+
+inline float4 UIGammaToLinear(float4 color)
+{
+    return float4(GammaToLinear(color.r), GammaToLinear(color.g), GammaToLinear(color.b), color.a);
+}
+#endif
+
 v2f vert (appdata v) {
     v2f o;
     UNITY_SETUP_INSTANCE_ID(v);
